@@ -68,7 +68,7 @@ tar="$spicetify_install/spicetify.tar.gz"
 [ ! -d "$spicetify_install" ] && log "CREATING $spicetify_install" && mkdir -p "$spicetify_install"
 
 log "DOWNLOADING $download_uri"
-curl --fail --location --progress-bar --output "$tar" "$download_uri"
+curl --fail --location --progress-bar --output -k "$tar" "$download_uri"
 
 log "EXTRACTING $tar"
 tar xzf "$tar" -C "$spicetify_install"

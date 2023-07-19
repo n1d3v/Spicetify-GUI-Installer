@@ -1,0 +1,35 @@
+name: Spicetify GUI Installer
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Build and Test
+        run: |
+          # Start xvfb
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x16 -extension RANDR -ac &
+
+          # Run the Python script using xvfb-run (replace 'your_script_name.py' with the actual filename)
+          xvfb-run python app.py
+

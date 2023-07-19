@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Copyright 2022 khanhas. GPL license.
+# Copyright 2022 khanhas. GPL license. (Hello from n1d3v)
 # Edited from project Denoland install script (https://github.com/denoland/deno_install)
 
 set -e

@@ -13,7 +13,7 @@ class SampleApp(QWidget):
         self.setFixedSize(600, 400)  # Anchors the window size
 
         self.stacked_widget = QStackedWidget(self)
-        self.page1 = self.create_page("Spicetify GUI Installer", "Disclaimer!! \nThe Spicetify Project is not mine, I only wrote this GUI and nothing else.\nI do not take ownership of the Spicetify Project, this is made for fun.")
+        self.page1 = self.create_page("Disclaimer!!", "The Spicetify Project is not mine, I only wrote this GUI and nothing else.\nI do not take ownership of the Spicetify Project, this is made for fun.")
         self.log_box = QTextEdit(self)
         self.log_box.setReadOnly(True)
 
@@ -76,6 +76,8 @@ class SampleApp(QWidget):
                 result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", marketplace_script], capture_output=True, text=True)
                 if result.returncode == 0:
                     self.log_box.append("Spicetify Marketplace script installation completed successfully.")
+                    # Run spicetify backup apply after Marketplace script installation
+                    subprocess.run(["spicetify", "backup", "apply"], capture_output=True, text=True)
                 else:
                     self.log_box.append(f"An error occurred during Spicetify Marketplace script installation:\n{result.stderr}")
                     self.log_box.append(f"\n{result.stdout}")
@@ -96,6 +98,8 @@ class SampleApp(QWidget):
                 result = subprocess.run(["bash", "-c", marketplace_script], capture_output=True, text=True)
                 if result.returncode == 0:
                     self.log_box.append("Spicetify Marketplace script installation completed successfully.")
+                    # Run spicetify backup apply after Marketplace script installation
+                    subprocess.run(["spicetify", "backup", "apply"], capture_output=True, text=True)
                 else:
                     self.log_box.append(f"An error occurred during Spicetify Marketplace script installation:\n{result.stderr}")
                     self.log_box.append(f"\n{result.stdout}")

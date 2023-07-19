@@ -30,18 +30,18 @@ fi
 TAR_FILE="$INSTALL_DIR/marketplace-dist.zip"
 
 echo "DOWNLOADING $download_uri"
-wget -q -O "$TAR_FILE" --no-check-certificate "$download_uri"
+wget -q -O "$TAR_FILE" --no-check-certificate "$download_uri" &> wget_log.txt
 
-# Display the first few lines of the downloaded file (for debugging purposes)
-echo "FIRST FEW LINES OF DOWNLOADED FILE:"
-head -n 20 "$TAR_FILE"
+if [ $? -ne 0 ]; then
+    echo "Failed to download the ZIP file. Check wget_log.txt for details."
+    exit 1
+fi
 
 cd "$INSTALL_DIR"
 
 echo "EXTRACTING"
 unzip -q -d "$INSTALL_DIR/marketplace-tmp" "$TAR_FILE" || {
-    echo "Failed to extract the ZIP archive. Here are the first few lines of the downloaded file:"
-    head -n 20 "$TAR_FILE"
+    echo "Failed to extract the ZIP archive. Check the downloaded file or the ZIP file content in wget_log.txt for details."
     exit 1
 }
 

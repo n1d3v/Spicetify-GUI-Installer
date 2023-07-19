@@ -1,7 +1,7 @@
 # Spicetify-GUI-Installer
 A GUI for Spicetify. Project is originally made by @BaamBuus
 
-Note: Only works on Windows. Soon there will be other OS implementations.
+Note: Only works on Windows and Linux. Soon there **might** be macOS implementation but PyQt5 is broken on it.
 # Why?
 Just to make it easier to install Spicetify. 
 

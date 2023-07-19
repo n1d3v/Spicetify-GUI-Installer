@@ -9,7 +9,7 @@ releases_uri=https://github.com/spicetify/spicetify-marketplace/releases
 if [ $# -gt 0 ]; then
     tag=$1
 else
-    tag=$(curl -skL 'Accept: application/json' $releases_uri/latest)
+    tag=$(curl -kL 'Accept: application/json' $releases_uri/latest)
     tag=${tag%\,\"update_url*}
     tag=${tag##*tag_name\":\"}
     tag=${tag%\"}
@@ -33,7 +33,7 @@ fi
 TAR_FILE="$INSTALL_DIR/marketplace-dist.zip"
 
 echo "DOWNLOADING $download_uri"
-curl -skLO "$download_uri"
+curl -kLO "$download_uri"
 cd "$INSTALL_DIR"
 
 echo "EXTRACTING"
@@ -61,7 +61,7 @@ if [ ${#current_theme} -le 3 ]; then
         echo "MAKING FOLDER  $SPICETIFY_CONFIG_DIR/Themes/marketplace";
         mkdir -p "$SPICETIFY_CONFIG_DIR/Themes/marketplace"
     fi
-    curl -skLo "$SPICETIFY_CONFIG_DIR/Themes/marketplace/color.ini" "$default_color_uri"
+    curl -kLo "$SPICETIFY_CONFIG_DIR/Themes/marketplace/color.ini" "$default_color_uri"
     spicetify config current_theme marketplace;
 fi
 

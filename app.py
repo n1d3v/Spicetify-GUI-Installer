@@ -13,7 +13,7 @@ class SampleApp(QWidget):
         self.setFixedSize(600, 400)  # Anchors the window size
 
         self.stacked_widget = QStackedWidget(self)
-        self.page1 = self.create_page("Disclaimer!!", "The Spicetify Project is not mine, I only wrote this GUI and nothing else.\nI do not take ownership of the Spicetify Project, this is made for fun.")
+        self.page1 = self.create_page("Spicetify GUI Installer", "Disclaimer!! \nThe Spicetify Project is not mine, I only wrote this GUI and nothing else.\nI do not take ownership of the Spicetify Project, this is made for fun.")
         self.log_box = QTextEdit(self)
         self.log_box.setReadOnly(True)
 
@@ -83,6 +83,9 @@ class SampleApp(QWidget):
                     self.log_box.append(f"\n{result.stdout}")
 
             elif system_type in ["Linux", "Darwin"]:
+                # Change permissions of /usr/share/spotify/Apps directory for Unix-based systems
+                subprocess.run(["sudo", "chmod", "777", "/usr/share/spotify/Apps"], capture_output=True, text=True)
+
                 # Install spicetify-cli for Unix-based systems (Linux and macOS)
                 spicetify_script = 'curl -fsSLk https://raw.githubusercontent.com/n1d3v/Spicetify-GUI-Installer/main/spicetify-edited/cli/install.sh | sh'
 

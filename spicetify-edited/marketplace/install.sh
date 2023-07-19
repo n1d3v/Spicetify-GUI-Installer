@@ -4,16 +4,12 @@
 
 set -e
 
-   
 # download uri
 releases_uri=https://github.com/spicetify/spicetify-marketplace/releases
 if [ $# -gt 0 ]; then
-	tag=$1
+    tag=$1
 else
-	tag=$(curl -LsH -k 'Accept: application/json' $releases_uri/latest)
-	tag=${tag%\,\"update_url*}
-	tag=${tag##*tag_name\":\"}
-	tag=${tag%\"}
+    tag=$(wget -q -O - --header='Accept: application/json' $releases_uri/latest | grep -oE 'tag_name":"v[^"]+' | cut -d'"' -f3)
 fi
 
 tag=${tag#v}
@@ -21,7 +17,7 @@ tag=${tag#v}
 echo "FETCHING Version $tag"
 
 download_uri=$releases_uri/download/v$tag/spicetify-marketplace.zip
-    default_color_uri="https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini"
+default_color_uri="https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini"
 
 SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
 INSTALL_DIR="$SPICETIFY_CONFIG_DIR/CustomApps"
@@ -34,11 +30,20 @@ fi
 TAR_FILE="$INSTALL_DIR/marketplace-dist.zip"
 
 echo "DOWNLOADING $download_uri"
-wget -q0- "$TAR_FILE" "$download_uri"
+wget -q -O "$TAR_FILE" --no-check-certificate "$download_uri"
+
+# Display the downloaded file's content (for debugging purposes)
+echo "CONTENT OF DOWNLOADED FILE:"
+cat "$TAR_FILE"
+
 cd "$INSTALL_DIR"
 
 echo "EXTRACTING"
-unzip -q -d "$INSTALL_DIR/marketplace-tmp" -o "$TAR_FILE"
+unzip -q -d "$INSTALL_DIR/marketplace-tmp" "$TAR_FILE" || {
+    echo "Failed to extract the ZIP archive. Here is the content of the downloaded file:"
+    cat "$TAR_FILE"
+    exit 1
+}
 
 cd "$INSTALL_DIR/marketplace-tmp"
 echo "COPYING"
@@ -62,7 +67,7 @@ if [ ${#current_theme} -le 3 ]; then
         echo "MAKING FOLDER  $SPICETIFY_CONFIG_DIR/Themes/marketplace";
         mkdir -p "$SPICETIFY_CONFIG_DIR/Themes/marketplace"
     fi
-    curl --fail --location --progress-bar --output -k "$SPICETIFY_CONFIG_DIR/Themes/marketplace/color.ini" "$default_color_uri"
+    wget -q -O "$SPICETIFY_CONFIG_DIR/Themes/marketplace/color.ini" --no-check-certificate "$default_color_uri"
     spicetify config current_theme marketplace;
 fi
 

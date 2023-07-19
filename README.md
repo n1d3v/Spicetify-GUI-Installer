@@ -17,4 +17,4 @@ I do not own Spicetify, This is only made for fun and nothing else.
 
 I do not want to take ownership of the Spicetify Project.
 # Screenshots
-![image](https://github.com/n1d3v/Spicetify-GUI-Installer/assets/135556230/12c54ba3-602e-4787-9e16-6776c8f9f4b0)
+![image](https://github.com/n1d3v/Spicetify-GUI-Installer/assets/135556230/f9ab0d91-4274-4530-8f3f-d47dc4389bfb)

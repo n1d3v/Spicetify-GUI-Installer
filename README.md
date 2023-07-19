@@ -4,6 +4,12 @@ A GUI for Spicetify. Project is originally made by @BaamBuus
 Just to make it easier to install Spicetify. 
 
 This is just made for fun.
+# Want to build?
+Use pip to download PyQt5
+```python
+pip install pyqt5
+```
+And use app.py to run it. You can use PyInstaller to build it.
 # Disclaimer 
 I do not own Spicetify, This is only made for fun and nothing else.
 

@@ -1,5 +1,6 @@
 import sys
 import subprocess
+import platform
 import os
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QStackedWidget, QTextEdit
 from PyQt5.QtCore import Qt
@@ -50,18 +51,60 @@ class SampleApp(QWidget):
         self.log_box.clear()
         self.log_box.append("Installing Spicetify...\n")
 
+        system_type = platform.system()
         try:
-            # Install spicetify-cli
-            spicetify_script = 'Invoke-WebRequest -Uri "https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.ps1" -UseBasicParsing | Invoke-Expression'
-            subprocess.run(["powershell.exe", "-Command", spicetify_script], check=True, capture_output=True, text=True)
-            self.log_box.append("Spicetify installation completed successfully.")
+            if system_type == "Windows":
+                # Install spicetify-cli for Windows
+                spicetify_script = os.path.join(os.getenv("TEMP"), "install_spicetify.ps1")
+                spicetify_script_content = 'Invoke-Expression (New-Object System.Net.WebClient).DownloadString("https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.ps1")'
+                with open(spicetify_script, "w") as script_file:
+                    script_file.write(spicetify_script_content)
 
-            # Install Spicetify Marketplace script
-            marketplace_script = 'Invoke-WebRequest -Uri "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/install.ps1" -UseBasicParsing | Invoke-Expression'
-            subprocess.run(["powershell.exe", "-Command", marketplace_script], check=True, capture_output=True, text=True)
-            self.log_box.append("Spicetify Marketplace script installation completed successfully.")
-        except subprocess.CalledProcessError as e:
-            self.log_box.append(f"An error occurred during installation:\n{e.stderr}")
+                result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", spicetify_script], capture_output=True, text=True)
+                if result.returncode == 0:
+                    self.log_box.append("Spicetify installation completed successfully.")
+                else:
+                    self.log_box.append(f"An error occurred during Spicetify installation:\n{result.stderr}")
+                    self.log_box.append(f"\n{result.stdout}")
+
+                # Install Spicetify Marketplace script for Windows
+                marketplace_script = os.path.join(os.getenv("TEMP"), "install_marketplace.ps1")
+                marketplace_script_content = 'Invoke-Expression (New-Object System.Net.WebClient).DownloadString("https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/install.ps1")'
+                with open(marketplace_script, "w") as script_file:
+                    script_file.write(marketplace_script_content)
+
+                result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", marketplace_script], capture_output=True, text=True)
+                if result.returncode == 0:
+                    self.log_box.append("Spicetify Marketplace script installation completed successfully.")
+                else:
+                    self.log_box.append(f"An error occurred during Spicetify Marketplace script installation:\n{result.stderr}")
+                    self.log_box.append(f"\n{result.stdout}")
+
+            elif system_type in ["Linux", "Darwin"]:
+                # Install spicetify-cli for Unix-based systems (Linux and macOS)
+                spicetify_script = 'curl -fsSL https://raw.githubusercontent.com/n1d3v/Spicetify-GUI-Installer/main/spicetify-edited/cli/install.sh | sh'
+
+                result = subprocess.run(["bash", "-c", spicetify_script], capture_output=True, text=True)
+                if result.returncode == 0:
+                    self.log_box.append("Spicetify installation completed successfully.")
+                else:
+                    self.log_box.append(f"An error occurred during Spicetify installation:\n{result.stderr}")
+                    self.log_box.append(f"\n{result.stdout}")
+
+                # Install Spicetify Marketplace script for Unix-based systems
+                marketplace_script = 'curl -fsSL https://raw.githubusercontent.com/n1d3v/Spicetify-GUI-Installer/main/spicetify-edited/marketplace/install.sh | sh'
+                result = subprocess.run(["bash", "-c", marketplace_script], capture_output=True, text=True)
+                if result.returncode == 0:
+                    self.log_box.append("Spicetify Marketplace script installation completed successfully.")
+                else:
+                    self.log_box.append(f"An error occurred during Spicetify Marketplace script installation:\n{result.stderr}")
+                    self.log_box.append(f"\n{result.stdout}")
+
+            else:
+                raise Exception("Unsupported operating system.")
+
+        except Exception as e:
+            self.log_box.append(f"Error: {e}")
 
         self.log_box.append("\n")
 

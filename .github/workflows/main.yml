@@ -9,6 +9,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+- name: Install GNU Guix
+  # You may pin to the exact commit or the version.
+  # uses: PromyLOPh/guix-install-action@c30721d6f0961406fba1a4c453626e062e93273b
+  uses: PromyLOPh/guix-install-action@v1.4
+  with:
+    # Guix channel description as Scheme code
+    channels: # optional, default is (map (lambda (chan)
+       (if (guix-channel? chan)
+           (channel
+            (inherit chan)
+            (url "https://github.com/guix-mirror/guix.git"))
+           chan))
+     %default-channels)
+    # Run `guix pull` after installing Guix
+    pullAfterInstall: # optional, default is true
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

@@ -17,7 +17,7 @@ tag=${tag#v}
 echo "FETCHING Version $tag"
 
 download_uri=$releases_uri/download/v$tag/spicetify-marketplace.zip
-    default_color_uri="https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini"
+default_color_uri="https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini"
 
 SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
 INSTALL_DIR="$SPICETIFY_CONFIG_DIR/CustomApps"
@@ -34,7 +34,11 @@ curl -v -k -o "$TAR_FILE" "$download_uri"
 cd "$INSTALL_DIR"
 
 echo "EXTRACTING"
-unzip -q -d "$INSTALL_DIR/marketplace-tmp" -o "$TAR_FILE"
+unzip -q -d "$INSTALL_DIR/marketplace-tmp" "$TAR_FILE" || {
+    echo "Failed to extract the ZIP archive. Here is the content of the downloaded file:"
+    cat "$TAR_FILE"
+    exit 1
+}
 
 cd "$INSTALL_DIR/marketplace-tmp"
 echo "COPYING"

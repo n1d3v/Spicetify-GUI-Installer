@@ -47,7 +47,7 @@ releases_uri=https://github.com/spicetify/spicetify-cli/releases
 if [ $# -gt 0 ]; then
 	tag=$1
 else
-	tag=$(curl -LsH -k 'Accept: application/json' $releases_uri/latest)
+	tag=$(curl -k -LsH 'Accept: application/json' $releases_uri/latest)
 	tag=${tag%\,\"update_url*}
 	tag=${tag##*tag_name\":\"}
 	tag=${tag%\"}
@@ -68,7 +68,7 @@ tar="$spicetify_install/spicetify.tar.gz"
 [ ! -d "$spicetify_install" ] && log "CREATING $spicetify_install" && mkdir -p "$spicetify_install"
 
 log "DOWNLOADING $download_uri"
-curl --fail --location --progress-bar --output -k "$tar" "$download_uri"
+curl -k --fail --location --progress-bar --output "$tar" "$download_uri"
 
 log "EXTRACTING $tar"
 tar xzf "$tar" -C "$spicetify_install"

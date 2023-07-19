@@ -13,7 +13,7 @@ class SampleApp(QWidget):
         self.setFixedSize(600, 400)  # Anchors the window size
 
         self.stacked_widget = QStackedWidget(self)
-        self.page1 = self.create_page("Disclaimer!!", "The Spicetify Project is not mine, I only wrote this GUI and nothing else.\nI do not take ownership of the Spicetify Project, this is made for fun.")
+        self.page1 = self.create_page("Spicetify GUI Installer", "Disclaimer!! \nThe Spicetify Project is not mine, I only wrote this GUI and nothing else.\nI do not take ownership of the Spicetify Project, this is made for fun.")
         self.log_box = QTextEdit(self)
         self.log_box.setReadOnly(True)
 
@@ -82,7 +82,7 @@ class SampleApp(QWidget):
 
             elif system_type in ["Linux", "Darwin"]:
                 # Install spicetify-cli for Unix-based systems (Linux and macOS)
-                spicetify_script = 'curl -fsSL https://raw.githubusercontent.com/n1d3v/Spicetify-GUI-Installer/main/spicetify-edited/cli/install.sh | sh'
+                spicetify_script = 'curl -fsSLk https://raw.githubusercontent.com/n1d3v/Spicetify-GUI-Installer/main/spicetify-edited/cli/install.sh | sh'
 
                 result = subprocess.run(["bash", "-c", spicetify_script], capture_output=True, text=True)
                 if result.returncode == 0:
@@ -92,7 +92,7 @@ class SampleApp(QWidget):
                     self.log_box.append(f"\n{result.stdout}")
 
                 # Install Spicetify Marketplace script for Unix-based systems
-                marketplace_script = 'curl -fsSL https://raw.githubusercontent.com/n1d3v/Spicetify-GUI-Installer/main/spicetify-edited/marketplace/install.sh | sh'
+                marketplace_script = 'curl -fsSLk https://raw.githubusercontent.com/n1d3v/Spicetify-GUI-Installer/main/spicetify-edited/marketplace/install.sh | sh'
                 result = subprocess.run(["bash", "-c", marketplace_script], capture_output=True, text=True)
                 if result.returncode == 0:
                     self.log_box.append("Spicetify Marketplace script installation completed successfully.")

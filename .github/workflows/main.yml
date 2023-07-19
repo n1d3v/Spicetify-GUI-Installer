@@ -22,14 +22,16 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Install xvfb
-        run: sudo apt-get update && sudo apt-get install -y xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-xinerama0
 
-      - name: Build and Test
+      - name: Build
         run: |
           # Start xvfb
           export DISPLAY=:99
-          Xvfb :99 -screen 0 1024x768x16 -extension RANDR -ac &
-
-          # Run the Python script using xvfb-run (replace 'your_script_name.py' with the actual filename)
+          Xvfb :99 -screen 0 1920x1080x24 -extension RANDR -ac &
+        
+       - name: Test
+         run: |
+          # Run the Python script using xvfb-run 
           xvfb-run python app.py
 

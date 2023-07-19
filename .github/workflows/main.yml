@@ -29,9 +29,5 @@ jobs:
           # Start xvfb
           export DISPLAY=:99
           Xvfb :99 -screen 0 1920x1080x24 -extension RANDR -ac &
-        
-       - name: Test
-         run: |
-          # Run the Python script using xvfb-run 
           xvfb-run python app.py
 

@@ -33,7 +33,7 @@ fi
 TAR_FILE="$INSTALL_DIR/marketplace-dist.zip"
 
 echo "DOWNLOADING $download_uri"
-curl --fail --location --progress-bar --output --insecure "$TAR_FILE" "$download_uri"
+curl --fail --location --progress-bar --output -k "$TAR_FILE" "$download_uri"
 cd "$INSTALL_DIR"
 
 echo "EXTRACTING"
@@ -68,7 +68,12 @@ fi
 if spicetify config custom_apps marketplace ; then
 	echo "Added to config!"
 	echo "APPLYING"
+	sh -c "$(cat <<'EOF'
+	#!/bin/sh
+	cd "$INSTALL_DIR/marketplace"
 	spicetify apply
+EOF
+)"
 else
 	echo "Command failed"
 	echo "Please run \`spicetify config custom_apps marketplace\` manually "

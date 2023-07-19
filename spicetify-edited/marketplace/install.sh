@@ -34,7 +34,7 @@ fi
 TAR_FILE="$INSTALL_DIR/marketplace-dist.zip"
 
 echo "DOWNLOADING $download_uri"
-curl --fail --location -k "$TAR_FILE" "$download_uri"
+curl --insecure "$TAR_FILE" "$download_uri"
 cd "$INSTALL_DIR"
 
 echo "EXTRACTING"

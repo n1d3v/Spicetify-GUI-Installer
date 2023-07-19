@@ -2,6 +2,7 @@
 A GUI for Spicetify. Project is originally made by @BaamBuus
 
 Note: Only works on Windows and Linux. Soon there **might** be macOS implementation but PyQt5 is broken on it.
+Another Note: The spicetify-edited directory in the main branch is edited Spicetify install.sh files as we couldn't get SSL working correctly with the official ones so we modified them to work.
 # Why?
 Just to make it easier to install Spicetify. 
 

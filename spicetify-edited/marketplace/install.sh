@@ -4,12 +4,16 @@
 
 set -e
 
+   
 # download uri
 releases_uri=https://github.com/spicetify/spicetify-marketplace/releases
 if [ $# -gt 0 ]; then
-    tag=$1
+	tag=$1
 else
-    tag=$(wget -q -O - --header='Accept: application/json' $releases_uri/latest | grep -oE 'tag_name":"v[^"]+' | cut -d'"' -f3)
+	tag=$(curl -k -LsH 'Accept: application/json' $releases_uri/latest)
+	tag=${tag%\,\"update_url*}
+	tag=${tag##*tag_name\":\"}
+	tag=${tag%\"}
 fi
 
 tag=${tag#v}
@@ -30,20 +34,11 @@ fi
 TAR_FILE="$INSTALL_DIR/marketplace-dist.zip"
 
 echo "DOWNLOADING $download_uri"
-wget -q -O "$TAR_FILE" --no-check-certificate "$download_uri" &> wget_log.txt
-
-if [ $? -ne 0 ]; then
-    echo "Failed to download the ZIP file. Check wget_log.txt for details."
-    exit 1
-fi
-
+curl -k --fail --location --progress-bar --output "$TAR_FILE" "$download_uri"
 cd "$INSTALL_DIR"
 
 echo "EXTRACTING"
-unzip -q -d "$INSTALL_DIR/marketplace-tmp" "$TAR_FILE" || {
-    echo "Failed to extract the ZIP archive. Check the downloaded file or the ZIP file content in wget_log.txt for details."
-    exit 1
-}
+unzip -q -d "$INSTALL_DIR/marketplace-tmp" -o "$TAR_FILE"
 
 cd "$INSTALL_DIR/marketplace-tmp"
 echo "COPYING"
@@ -67,7 +62,7 @@ if [ ${#current_theme} -le 3 ]; then
         echo "MAKING FOLDER  $SPICETIFY_CONFIG_DIR/Themes/marketplace";
         mkdir -p "$SPICETIFY_CONFIG_DIR/Themes/marketplace"
     fi
-    wget -q -O "$SPICETIFY_CONFIG_DIR/Themes/marketplace/color.ini" --no-check-certificate "$default_color_uri"
+    curl -k --fail --location --progress-bar --output "$SPICETIFY_CONFIG_DIR/Themes/marketplace/color.ini" "$default_color_uri"
     spicetify config current_theme marketplace;
 fi
 

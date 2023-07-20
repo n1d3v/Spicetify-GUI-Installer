@@ -9,9 +9,9 @@ Just to make it easier to install Spicetify.
 
 This is just made for fun.
 # Want to build?
-Use pip to download PyQt5
+Use pip to download PyQt5 and Requests.
 ```python
-pip install pyqt5
+pip install pyqt5 requests
 ```
 And use app.py to run it. You can use PyInstaller to build it.
 # Disclaimer 
